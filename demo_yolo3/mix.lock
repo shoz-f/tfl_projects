@@ -1,6 +1,6 @@
 %{
   "cimg": {:git, "https://github.com/shoz-f/cimg_ex.git", "b93dabc4b3f8510f80b5b60239f70c9551b25190", []},
   "elixir_make": {:hex, :elixir_make, "0.6.2", "7dffacd77dec4c37b39af867cedaabb0b59f6a871f89722c25b28fcd4bd70530", [:mix], [], "hexpm", "03e49eadda22526a7e5279d53321d1cced6552f344ba4e03e619063de75348d9"},
-  "mix_cmake": {:git, "https://github.com/shoz-f/mix_cmake.git", "e9e6ef31aeb368d68abaad34ad408ad0cb7f1070", []},
+  "mix_cmake": {:git, "https://github.com/shoz-f/mix_cmake.git", "3ddf834049404e0a25930d0270a590236c80f1b6", []},
   "poison": {:hex, :poison, "3.1.0", "d9eb636610e096f86f25d9a46f35a9facac35609a7591b3be3326e99a0484665", [:mix], [], "hexpm", "fec8660eb7733ee4117b85f55799fd3833eb769a6df71ccf8903e8dc5447cfce"},
 }

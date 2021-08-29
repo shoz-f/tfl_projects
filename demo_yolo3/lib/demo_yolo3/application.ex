@@ -10,7 +10,7 @@ defmodule DemoYolo3.Application do
     children = [
       # Starts a worker by calling: DemoYolo3.Worker.start_link(arg)
       # {DemoYolo3.Worker, arg}
-      {TflInterp, [model: "priv/yolov3-416-dr.tflite", label: "priv/coco.label", opts: "-d 3"]}
+      DemoYolo3.Yolo3
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

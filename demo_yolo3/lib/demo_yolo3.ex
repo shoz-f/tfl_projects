@@ -3,6 +3,7 @@ defmodule DemoYolo3 do
   Documentation for `DemoYolo3`.
   """
 
+  alias DemoYolo3.Yolo3
 
   @doc """
   """
@@ -12,8 +13,8 @@ defmodule DemoYolo3 do
       |> CImg.resize([416,416])
       |> CImg.to_flatnorm()
     
-    TflInterp.set_input_tensor(0, img.data)
-    TflInterp.invoke()
-    TflInterp.non_max_suppression_multi_class(0, 1)
+    TflInterp.set_input_tensor(Yolo3, 0, img.data)
+    TflInterp.invoke(Yolo3)
+    TflInterp.non_max_suppression_multi_class(Yolo3, 0, 1, 0.5, 0.25, 0.0)
   end
 end
