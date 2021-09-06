@@ -27,3 +27,4 @@ demo_yolo3-*.tar
 
 # blindfold "tfl_interp"
 tfl_interp/
+*.tflite
