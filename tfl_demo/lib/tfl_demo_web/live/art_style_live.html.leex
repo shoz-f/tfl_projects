@@ -1,0 +1,42 @@
+<div id="input" class="columns">
+  <div class="column is-one-third"><div class="box">
+    <p class="is-size-5 has-text-weight-medium">
+      Style image
+    </p>
+
+    <img src="<%= @style %>" style="height: 200px;">
+
+    <form phx-change="validate" class="button is-primary is-fullwidth">
+      select style image
+      <%= live_file_input(@uploads.style, [class: "file-input"]) %>
+    </form>
+  </div></div>
+
+  <div class="column is-one-third"><div class="box">
+    <p class="is-size-5 has-text-weight-medium">
+      Content image
+    </p>
+
+    <img src="<%= @content %>" style="height: 200px;">
+
+    <form phx-submit="save" phx-change="validate" class="button is-primary is-fullwidth">
+      select content image
+      <%= live_file_input(@uploads.content, [class: "file-input"]) %>
+    </form>
+  </div></div>
+
+  <div class="column"></div>
+</div>
+
+<div id="output" class="columns">
+  <div class="column is-two-thirds"><div class="box">
+    <p class="is-size-5 has-text-weight-medium">
+      Applied
+    </p>
+    <div id="artistic">
+      <img src="<%= @applied %>"  style="height: 400px;">
+    </div>
+  </div></div>
+  
+  <div class="column"></div>
+</div>

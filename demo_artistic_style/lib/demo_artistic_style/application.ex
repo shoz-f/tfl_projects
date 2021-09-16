@@ -11,7 +11,8 @@ defmodule DemoArtisticStyle.Application do
       # Starts a worker by calling: DemoArtisticStyle.Worker.start_link(arg)
       # {DemoArtisticStyle.Worker, arg}
       DemoArtisticStyle.Prediction,
-      DemoArtisticStyle.Transfer
+      DemoArtisticStyle.Transfer,
+      DemoArtisticStyle
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

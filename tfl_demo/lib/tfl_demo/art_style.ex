@@ -1,8 +1,14 @@
-defmodule DemoArtisticStyle do
+defmodule TflDemo.ArtStyle.Prediction do
+  use TflInterp, model: "priv/magenta_arbitrary-image-stylization-v1-256_int8_prediction_1.tflite"
+end
+
+defmodule TflDemo.ArtStyle.Transfer do
+  use TflInterp, model: "priv/magenta_arbitrary-image-stylization-v1-256_int8_transfer_1.tflite"
+end
+
+defmodule TflDemo.ArtStyle do
   use GenServer
-  
-  alias DemoArtisticStyle, as: ArtStyle
-  
+
   defstruct style: nil, content: nil, shape: nil
 
   def start_link(opts \\ []) do
@@ -46,7 +52,7 @@ defmodule DemoArtisticStyle do
   end
 
   defp get_style(img) do
-    ArtStyle.Prediction
+    TflDemo.ArtStyle.Prediction
     |> TflInterp.set_input_tensor(0, img.data)
     |> TflInterp.invoke()
     |> TflInterp.get_output_tensor(0)
@@ -54,7 +60,7 @@ defmodule DemoArtisticStyle do
 
   defp apply_style(img, style, {x,y,_,_}) do
     applied =
-      ArtStyle.Transfer
+      TflDemo.ArtStyle.Transfer
       |> TflInterp.set_input_tensor(0, img.data)
       |> TflInterp.set_input_tensor(1, style)
       |> TflInterp.invoke()
@@ -64,15 +70,23 @@ defmodule DemoArtisticStyle do
     |> CImg.resize([x, y])
   end
 
+
   def info() do
     GenServer.call(__MODULE__, :info)
+  end
+  
+  def opening(style, content) do
+    if info() == %__MODULE__{} do
+      set_style(style)
+      artistic(content)
+    end
   end
 
   def set_style(img_file) do
     GenServer.call(__MODULE__, {:set_style, img_file})
   end
   
-  def apply_style(img_file) do
+  def artistic(img_file) do
     GenServer.call(__MODULE__, {:apply_style, img_file})
   end
 end
