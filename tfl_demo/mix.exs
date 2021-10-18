@@ -44,8 +44,10 @@ defmodule TflDemo.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
 
-      {:cimg, git: "https://github.com/shoz-f/cimg_ex.git"},
-      {:tfl_interp, path: "../tfl_interp"}
+#      {:cimg, git: "https://github.com/shoz-f/cimg_ex.git"},
+      {:cimg, path: "../../eCimg"},
+      {:tfl_interp, path: "../tfl_interp"},
+      {:npy, path: "../../npy"}
     ]
   end
 
