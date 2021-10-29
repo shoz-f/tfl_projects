@@ -1,16 +1,33 @@
-defmodule TflDemo.YoloX.Prediction do
-  use TflInterp, model: "priv/yolox_s.tflite", label: "priv/coco.label"
-end
-
 defmodule TflDemo.YoloX do
-  @yolox_shape {640, 640}
+  alias TflDemo.YoloX.Prediction
 
-  @doc false
   def apply_yolox(img_file) do
-    # preprocess
     img = CImg.create(img_file)
 
-    bin = img
+    # yolox prediction
+    {:ok, res} = Prediction.apply(img)
+
+    # draw result
+    Enum.reduce(res, CImg.dup(img), &draw_object(&2, &1))
+  end                                                                                                       
+
+  defp draw_object(cimg, {_name, boxes}) do
+    Enum.reduce(boxes, cimg, fn [_score|box], img ->
+      [x0, y0, x1, y1] = Enum.map(box, &round(&1))
+      CImg.draw_rect(img, x0, y0, x1, y1, {255,0,0})
+    end)
+  end
+end
+
+defmodule TflDemo.YoloX.Prediction do
+  use TflInterp, model: "priv/yolox_s.tflite", label: "priv/coco.label"
+
+  @yolox_shape {640, 640}
+
+  def apply(img) do
+    # preprocess
+    bin = 
+      CImg.dup(img)
       |> CImg.get_packed([640,640], 114)
       |> CImg.to_flatf4(true, true)
 
@@ -23,30 +40,22 @@ defmodule TflDemo.YoloX do
       |> Nx.from_binary({:f, 32}) |> Nx.reshape({:auto, 85})
 
     # postprocess
-    boxes  = extract_boxes(outputs)
+    boxes  = extract_boxes(outputs, scale(img))
     scores = extract_scores(outputs)
 
-    {:ok, res} = TflInterp.non_max_suppression_multi_class(TflDemo.YoloX.Prediction,
+    TflInterp.non_max_suppression_multi_class(__MODULE__,
       Nx.shape(scores), Nx.to_binary(boxes), Nx.to_binary(scores)
     )
-    
-    # draw result
-    {w, h, _, _}   = CImg.shape(img)
-    {wsize, hsize} = @yolox_shape
-    scale = max(w/wsize, h/hsize)
-
-    Enum.reduce(res, CImg.dup(img), &draw_object(&2, &1, scale))
   end
 
-  @doc false
-  def extract_boxes(tensor) do
+  defp extract_boxes(tensor, scale \\ 1.0) do
     {grid, strides} = grid_strides(@yolox_shape, [8, 16, 32])
 
     [
       Nx.add(Nx.slice_axis(tensor, 0, 2, 1), grid),
       Nx.exp(Nx.slice_axis(tensor, 2, 2, 1))
     ]
-    |> Nx.concatenate(axis: 1) |> Nx.multiply(strides)
+    |> Nx.concatenate(axis: 1) |> Nx.multiply(strides) |> Nx.multiply(scale)
   end
 
   defp grid_strides({wsize, hsize}, block) do
@@ -67,16 +76,13 @@ defmodule TflDemo.YoloX do
     Nx.tensor(stride) |> Nx.tile([hsize*wsize, 1])
   end
 
-  @doc false
-  def extract_scores(tensor) do
+  defp extract_scores(tensor) do
     Nx.multiply(Nx.slice_axis(tensor, 4, 1, 1), Nx.slice_axis(tensor, 5, 80, 1))
   end
-
-  @doc false
-  def draw_object(cimg, {_name, boxes}, scale) do
-    Enum.reduce(boxes, cimg, fn [_score|box], img ->
-      [x0, y0, x1, y1] = Enum.map(box, &round(scale * &1))
-      CImg.draw_rect(img, x0, y0, x1, y1, {255,255,0})
-    end)
+  
+  defp scale(img) do
+    {w, h, _, _}   = CImg.shape(img)
+    {wsize, hsize} = @yolox_shape
+    max(w/wsize, h/hsize)
   end
 end
