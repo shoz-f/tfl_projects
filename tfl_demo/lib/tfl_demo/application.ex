@@ -19,7 +19,9 @@ defmodule TflDemo.Application do
       TflDemo.ArtStyle.Transfer,
       TflDemo.ArtStyle,
       
-      TflDemo.YoloX.Prediction
+      TflDemo.YoloX.Prediction,
+      
+      TflDemo.DeepLab3.Prediction
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

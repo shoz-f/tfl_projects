@@ -28,8 +28,8 @@ defmodule TflDemo.YoloX.Prediction do
     # preprocess
     bin = 
       CImg.dup(img)
-      |> CImg.get_packed([640,640], 114)
-      |> CImg.to_flatf4(true, true)
+      |> CImg.get_packed(@yolox_shape, 114)
+      |> CImg.to_flat([{:range, {0.0, 255.0}}, :nchw, :bgr])
 
     # prediction
     outputs =

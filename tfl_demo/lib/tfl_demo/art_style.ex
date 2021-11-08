@@ -26,8 +26,8 @@ defmodule TflDemo.ArtStyle do
   def handle_call({:set_style, img_file}, _from, state) do
     sample =
       CImg.create(img_file)
-      |> CImg.resize([256,256])
-      |> CImg.to_flatnorm()
+      |> CImg.resize({256,256})
+      |> CImg.to_flat()
     state = %{state| style: get_style(sample)}
 
     if state.content do
@@ -40,7 +40,7 @@ defmodule TflDemo.ArtStyle do
   def handle_call({:apply_style, img_file}, _from, state) do
     content = CImg.create(img_file)
     state = %{state|
-      content: CImg.to_flatnorm(CImg.get_resize(content, [384,384])),
+      content: CImg.to_flat(CImg.get_resize(content, {384,384})),
       shape:   CImg.shape(content)
     }
 
@@ -67,7 +67,7 @@ defmodule TflDemo.ArtStyle do
       |> TflInterp.get_output_tensor(0)
 
     CImg.create_from_f4bin(384, 384, 1, 3, applied)
-    |> CImg.resize([x, y])
+    |> CImg.resize({x, y})
   end
 
 
