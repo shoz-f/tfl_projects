@@ -36,6 +36,8 @@ defmodule TflDemo.DeepLab3.Prediction do
       |> Nx.as_type({:u, 8})
       |> Nx.to_binary()
     
-    mask = CImg.create_from_u8bin(257, 257, 1, 1, bin)
+    mask =
+      CImg.create_from_u8bin(257, 257, 1, 1, bin)
+      |> CImg.map("lines")
   end
 end
