@@ -2,7 +2,7 @@ defmodule TflDemo.DeepLab3 do
   alias TflDemo.DeepLab3.Prediction
 
   def apply_deeplab3(img_file) do
-    img = CImg.create(img_file)
+    img = CImg.load(img_file)
 
     Prediction.apply(img)
   end
@@ -30,14 +30,12 @@ defmodule TflDemo.DeepLab3.Prediction do
       |> Nx.from_binary({:f, 32}) |> Nx.reshape({257, 257, :auto})
       
     # postprocess
-    bin =
+    mask =
       outputs
       |> Nx.argmax(axis: 2)
       |> Nx.as_type({:u, 8})
       |> Nx.to_binary()
-    
-    mask =
-      CImg.create_from_u8bin(257, 257, 1, 1, bin)
+      |> CImg.create_from_bin(257, 257, 1, 1, "<u1")
       |> CImg.map("lines")
   end
 end

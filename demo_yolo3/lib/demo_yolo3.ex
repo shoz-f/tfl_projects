@@ -7,8 +7,8 @@ defmodule DemoYolo3 do
   """
   def test() do
     img =
-      CImg.create("test/dog.jpg")
-      |> CImg.resize([416,416])
+      CImg.load("test/dog.jpg")
+      |> CImg.resize({416,416})
       |> CImg.to_flatnorm()
 
     DemoYolo3.Yolo3

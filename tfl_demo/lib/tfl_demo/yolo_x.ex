@@ -2,7 +2,7 @@ defmodule TflDemo.YoloX do
   alias TflDemo.YoloX.Prediction
 
   def apply_yolox(img_file) do
-    img = CImg.create(img_file)
+    img = CImg.load(img_file)
 
     # yolox prediction
     {:ok, res} = Prediction.apply(img)
