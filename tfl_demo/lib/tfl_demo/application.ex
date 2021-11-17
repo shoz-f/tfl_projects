@@ -15,7 +15,7 @@ defmodule TflDemo.Application do
       TflDemoWeb.Endpoint,
       # Start a worker by calling: TflDemo.Worker.start_link(arg)
       # {TflDemo.Worker, arg}
-      TflDemo.ArtStyle.Prediction,
+      TflDemo.ArtStyle.Style,
       TflDemo.ArtStyle.Transfer,
       TflDemo.ArtStyle,
       
