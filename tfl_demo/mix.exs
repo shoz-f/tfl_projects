@@ -47,7 +47,7 @@ defmodule TflDemo.MixProject do
 #      {:cimg, git: "https://github.com/shoz-f/cimg_ex.git"},
       {:cimg, path: "../../eCimg"},
       {:tfl_interp, path: "../tfl_interp"},
-      {:npy, path: "../../npy"},
+      {:npy, git: "https://github.com/shoz-f/npy_ex.git"},
       {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", branch: "main", sparse: "nx"}
     ]
   end
