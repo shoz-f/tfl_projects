@@ -21,7 +21,9 @@ defmodule TflDemo.Application do
       
       TflDemo.YoloX.Prediction,
       
-      TflDemo.DeepLab3.Prediction
+      TflDemo.DeepLab3.Prediction,
+      
+      TflDemo.HandTrack.Prediction
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

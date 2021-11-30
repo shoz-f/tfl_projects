@@ -45,7 +45,8 @@ defmodule TflDemo.MixProject do
       {:plug_cowboy, "~> 2.0"},
 
 #      {:cimg, git: "https://github.com/shoz-f/cimg_ex.git"},
-      {:cimg, path: "../../eCimg"},
+      {:cimg, path: "../../cimg_ex"},
+#      {:cimg, "~> 0.1.3"},
       {:tfl_interp, path: "../tfl_interp"},
       {:npy, git: "https://github.com/shoz-f/npy_ex.git"},
       {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", branch: "main", sparse: "nx"}

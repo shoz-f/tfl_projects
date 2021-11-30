@@ -18,7 +18,7 @@ defmodule TflDemo.DeepLab3.Prediction do
     # preprocess
     bin =
       CImg.dup(img)
-      |> CImg.resize(@deeplab3_shape)
+      |> CImg.get_resize(@deeplab3_shape)
       |> CImg.to_flat(range: {-1.0, 1.0})
 
     # prediction
