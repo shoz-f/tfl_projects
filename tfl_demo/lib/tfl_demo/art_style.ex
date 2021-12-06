@@ -42,36 +42,39 @@ defmodule TflDemo.ArtStyle do
     sample = CImg.load(img_file)
     state = %{state| style: Style.get_style(sample)}
 
-    if state.content do
-      {:reply, Transfer.apply_style(state.content, state.style, state.shape), state}
-    else
-      {:reply, nil, state}
-    end
+    {
+      :reply,
+      if state.content, do: Transfer.apply_style(state.content, state.style, state.shape),
+      state
+    }
   end
   
   def handle_call({:apply_style, img_file}, _from, state) do
     content = CImg.load(img_file)
     state = %{state|
-      content: CImg.to_flat(CImg.get_resize(content, {384,384})),
+      content: CImg.to_flat(CImg.get_resize(content, {384,384})),   # preprocess content image
       shape:   CImg.shape(content)
     }
 
-    if state.style do
-      {:reply, Transfer.apply_style(state.content, state.style, state.shape), state}
-    else
-      {:reply, nil, state}
-    end
+    {
+      :reply,
+      if state.style, do: Transfer.apply_style(state.content, state.style, state.shape),
+      state
+    }
   end
 end
+
 
 defmodule TflDemo.ArtStyle.Style do
   use TflInterp, model: "priv/magenta_arbitrary-image-stylization-v1-256_int8_prediction_1.tflite"
   
   def get_style(img) do
-    bin = CImg.dup(img)
-      |> CImg.resize({256,256})
+    # preprocess
+    bin = img
+      |> CImg.get_resize({256,256})
       |> CImg.to_flat()
-  
+
+    # prediction
     __MODULE__
     |> TflInterp.set_input_tensor(0, bin.data)
     |> TflInterp.invoke()
@@ -79,10 +82,12 @@ defmodule TflDemo.ArtStyle.Style do
   end
 end
 
+
 defmodule TflDemo.ArtStyle.Transfer do
   use TflInterp, model: "priv/magenta_arbitrary-image-stylization-v1-256_int8_transfer_1.tflite"
 
   def apply_style(img, style, {x,y,_,_}) do
+    # prediction
     applied =
       __MODULE__
       |> TflInterp.set_input_tensor(0, img.data)
@@ -90,7 +95,8 @@ defmodule TflDemo.ArtStyle.Transfer do
       |> TflInterp.invoke()
       |> TflInterp.get_output_tensor(0)
 
-    CImg.create_from_f4bin(384, 384, 1, 3, applied)
-    |> CImg.resize({x, y})
+    # postprocess
+    CImg.create_from_bin(applied, 384, 384, 1, 3, "<f4")
+    |> CImg.get_resize({x, y})
   end
 end

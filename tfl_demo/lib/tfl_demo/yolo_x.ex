@@ -7,12 +7,13 @@ defmodule TflDemo.YoloX do
     # yolox prediction
     {:ok, res} = Prediction.apply(img)
 
-    # draw result
-    Enum.reduce(res, CImg.dup(img), &draw_object(&2, &1))
-  end                                                                                                       
+    # draw result box
+    Enum.reduce(res, CImg.builder(img), &draw_object(&2, &1))
+    |> CImg.runit()
+  end
 
-  defp draw_object(cimg, {_name, boxes}) do
-    Enum.reduce(boxes, cimg, fn [_score|box], img ->
+  defp draw_object(buildre, {_name, boxes}) do
+    Enum.reduce(boxes, builder, fn [_score|box], img ->
       [x0, y0, x1, y1] = Enum.map(box, &round(&1))
       CImg.draw_rect(img, x0, y0, x1, y1, {255,0,0})
     end)
