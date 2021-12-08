@@ -12,7 +12,7 @@ defmodule TflDemo.YoloX do
     |> CImg.runit()
   end
 
-  defp draw_object(buildre, {_name, boxes}) do
+  defp draw_object(builder, {_name, boxes}) do
     Enum.reduce(boxes, builder, fn [_score|box], img ->
       [x0, y0, x1, y1] = Enum.map(box, &round(&1))
       CImg.draw_rect(img, x0, y0, x1, y1, {255,0,0})

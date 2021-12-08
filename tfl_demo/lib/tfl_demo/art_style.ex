@@ -44,7 +44,7 @@ defmodule TflDemo.ArtStyle do
 
     {
       :reply,
-      if state.content, do: Transfer.apply_style(state.content, state.style, state.shape),
+      if state.content do Transfer.apply_style(state.content, state.style, state.shape) end,
       state
     }
   end
@@ -58,7 +58,7 @@ defmodule TflDemo.ArtStyle do
 
     {
       :reply,
-      if state.style, do: Transfer.apply_style(state.content, state.style, state.shape),
+      if state.style do Transfer.apply_style(state.content, state.style, state.shape) end,
       state
     }
   end
