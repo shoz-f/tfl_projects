@@ -5,6 +5,7 @@ defmodule TflDemo.Application do
 
   use Application
 
+  @impl true
   def start(_type, _args) do
     children = [
       # Start the Telemetry supervisor
@@ -34,6 +35,7 @@ defmodule TflDemo.Application do
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
+  @impl true
   def config_change(changed, _new, removed) do
     TflDemoWeb.Endpoint.config_change(changed, removed)
     :ok
