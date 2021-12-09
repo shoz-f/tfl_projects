@@ -1,0 +1,25 @@
+<div class="columns">
+  <div class="column is-one-third"><div class="box">
+    <p class="is-size-5 has-text-weight-medium">
+      Source image
+    </p>
+
+    <img src={@content} style="height: 300px;">
+
+    <form phx-change="validate" class="button is-primary is-fullwidth">
+      select image
+      <%= live_file_input(@uploads.content, [class: "file-input"]) %>
+    </form>
+  </div></div>
+
+  <div class="column is-one-third"><div class="box">
+    <p class="is-size-5 has-text-weight-medium">
+      Apply YOLO-X
+    </p>
+    <div id="yolox">
+      <img src={@applied}  style="height: 300px;">
+    </div>
+  </div></div>
+  
+  <div class="column"></div>
+</div>

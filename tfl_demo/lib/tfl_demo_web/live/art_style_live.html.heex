@@ -4,7 +4,7 @@
       Style image
     </p>
 
-    <img src="<%= @style %>" style="height: 200px;">
+    <img src={@style} style="height: 200px;">
 
     <form phx-change="validate" class="button is-primary is-fullwidth">
       select style image
@@ -17,7 +17,7 @@
       Content image
     </p>
 
-    <img src="<%= @content %>" style="height: 200px;">
+    <img src={@content} style="height: 200px;">
 
     <form phx-submit="save" phx-change="validate" class="button is-primary is-fullwidth">
       select content image
@@ -34,7 +34,7 @@
       Applied
     </p>
     <div id="artistic">
-      <img src="<%= @applied %>"  style="height: 400px;">
+      <img src={@applied}  style="height: 400px;">
     </div>
   </div></div>
   

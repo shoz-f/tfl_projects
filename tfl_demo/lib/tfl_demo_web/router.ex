@@ -20,6 +20,8 @@ defmodule TflDemoWeb.Router do
     get "/", PageController, :index
     live "/", PageLive, :index
     live "/artstyle", ArtStyleLive
+    live "/yolox", YoloXLive
+    live "/deeplab3", DeepLab3Live
   end
 
   # Other scopes may use custom stacks.
