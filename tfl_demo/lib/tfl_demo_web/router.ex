@@ -22,6 +22,7 @@ defmodule TflDemoWeb.Router do
     live "/artstyle", ArtStyleLive
     live "/yolox", YoloXLive
     live "/deeplab3", DeepLab3Live
+    live "/handtrack", HandtrackLive
   end
 
   # Other scopes may use custom stacks.

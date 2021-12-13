@@ -1,19 +1,23 @@
 defmodule TflDemoWeb.YoloXLive do
   use TflDemoWeb, :live_view
+  import TflDemo, only: [init_file: 2, path_static: 1, unique_key: 1]
+
+  @target  "/images/yolox_src.jpg"
+  @applied "/images/yolox_res.jpg"
 
   @impl true
   def mount(_params, _session, socket) do
-    content = "/images/dog.jpg"
-    applied = "/images/yolox.jpg"
+    yolox = {@target, "/images/dog.jpg"}
+      |> init_file(&path_static/1)
+      |> TflDemo.YoloX.apply_yolox()
 
-    yolox = TflDemo.YoloX.apply_yolox(images_path(content))
     if yolox do
-      CImg.save(yolox, images_path(applied))
+      CImg.save(yolox, path_static(@applied))
     end
 
     socket = socket
-      |> assign(:content, content)
-      |> assign(:applied, applied)
+      |> assign(:content, @target)
+      |> assign(:applied, @applied)
       |> allow_upload(:content, accept: ~w(.jpg .jpeg), progress: &handle_upload/3, auto_upload: true)
 
     {:ok, socket}
@@ -26,41 +30,20 @@ defmodule TflDemoWeb.YoloXLive do
 
   defp handle_upload(:content, entry, socket) do
     if entry.done? do
-      content_file = update_img(:content, entry, socket)
-      socket = assign(socket, :content, content_file)
+      socket = assign(socket, :content, unique_key(@target))
 
-      yolox = TflDemo.YoloX.apply_yolox(images_path(content_file))
+      yolox = path_static(@target)
+        |> tap(&consume_uploaded_entry(socket, entry, fn %{path: path} -> File.copy!(path, &1) end))
+        |> TflDemo.YoloX.apply_yolox()
+
       if yolox do
-        File.rm!(images_path(socket.assigns[:applied]))
-
-        applied = unique_path("/images/yolox")
-        CImg.save(yolox, images_path(applied))
-
-        {:noreply, assign(socket, :applied, applied)}
+        CImg.save(yolox, path_static(@applied))
+        {:noreply, assign(socket, :applied, unique_key(@applied))}
       else
         {:noreply, socket}
       end
    else
       {:noreply, socket}
     end
-  end
-
-  defp update_img(key, entry, socket) do
-    # remove old image
-    File.rm!(images_path(socket.assigns[key]))
-
-    # get new image
-    consume_uploaded_entry(socket, entry, fn %{path: path} ->
-      Path.join("/images", "#{Path.basename(path)}.jpg")
-      |> tap(&File.cp!(path, images_path(&1)))
-    end)
-  end
-  
-  defp images_path(path) do
-    Path.join([Application.app_dir(:tfl_demo), "/priv/static", path])
-  end
-
-  defp unique_path(prefix, surfix \\ ".jpg") do
-    "#{prefix}-#{:os.system_time(:second)}-#{:rand.uniform(999_999_999_999_999)}-#{:erlang.system_info(:scheduler_id)}#{surfix}"
   end
 end
