@@ -47,7 +47,7 @@ config :tfl_demo, TflDemoWeb.Endpoint,
 config :tfl_demo, TflDemoWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+#      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/tfl_demo_web/(live|views)/.*(ex)$",
       ~r"lib/tfl_demo_web/templates/.*(eex)$"
